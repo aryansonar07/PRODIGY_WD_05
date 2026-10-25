@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weatherly - Weather App</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="weather-card">
+    <header class="top-row">
+      <h2 class="brand">☀ Weatherly</h2>
+    </header>
+
+    <form class="search-bar" id="search-form">
+      <label class="visually-hidden" for="city">Enter a city name</label>
+      <input type="text" id="city" name="city" placeholder="Search a city..." required>
+      <button type="submit" aria-label="Search for weather">⌕</button>
+    </form>
+
+    <button class="location-button" id="location-button" type="button">
+      ◎ &nbsp; Use my location
+    </button>
+
+    <p class="message" id="message" aria-live="polite">Search for a city or use your location.</p>
+
+    <section class="current-weather" aria-label="Current weather">
+      <p class="location" id="place"></p>
+      <p class="date" id="date"></p>
+
+      <div class="weather-main">
+        <div class="sun-icon" id="weather-icon" aria-hidden="true">☀</div>
+        <div class="temperature"><span id="temperature">--</span><span>°</span></div>
+      </div>
+
+      <h1 id="description"></h1>
+      <p class="feels-like">Feels like <span id="feels-like">--</span>°</p>
+    </section>
+
+    <section class="weather-details" aria-label="Weather details">
+      <div class="detail">
+        <span class="detail-icon">💧</span>
+        <div>
+          <p class="detail-label">Humidity</p>
+          <p class="detail-value"><span id="humidity">--</span>%</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <span class="detail-icon">🍃</span>
+        <div>
+          <p class="detail-label">Wind</p>
+          <p class="detail-value"><span id="wind">--</span> km/h</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <span class="detail-icon">☁</span>
+        <div>
+          <p class="detail-label">Clouds</p>
+          <p class="detail-value"><span id="clouds">--</span>%</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noopener">OpenWeatherMap</a>
+      <span>✦</span>
+    </footer>
+  </main>
+</body>
+</html>

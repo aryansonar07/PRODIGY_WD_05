@@ -4,6 +4,9 @@ bin-release/
 [Oo]bj/
 [Bb]in/
 
+# Local API keys
+config.js
+
 # Other files and folders
 .settings/
 
