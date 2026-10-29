@@ -1,1 +1,1 @@
-window.WEATHER_API_KEY = "b499c2377ce49dbe11c3ab2c016049b3";
+window.WEATHER_API_KEY = "Your_Weather_API_Key_Here";
