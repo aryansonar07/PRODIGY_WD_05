@@ -1,1 +1,0 @@
-window.WEATHER_API_KEY = "Your_Weather_API_Key_Here";
