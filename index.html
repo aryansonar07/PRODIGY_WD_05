@@ -3,26 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weatherly - Weather App</title>
+  <title>Weather App</title>
   <link rel="stylesheet" href="style.css">
-  <script src="config.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
   <main class="weather-card">
-    <header class="top-row">
-      <h2 class="brand">☀ Weatherly</h2>
-    </header>
+    <h1>Weather App</h1>
 
     <form class="search-bar" id="search-form">
-      <label class="visually-hidden" for="city">Enter a city name</label>
+      <label for="city">City:</label>
       <input type="text" id="city" name="city" placeholder="Search a city..." required>
-      <button type="submit" aria-label="Search for weather">⌕</button>
+      <button type="submit">Search</button>
     </form>
 
-    <button class="location-button" id="location-button" type="button">
-      ◎ &nbsp; Use my location
-    </button>
+    <button class="location-button" id="location-button" type="button">Use my location</button>
 
     <p class="message" id="message" aria-live="polite">Search for a city or use your location.</p>
 
@@ -67,7 +62,6 @@
 
     <footer>
       Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noopener">OpenWeatherMap</a>
-      <span>✦</span>
     </footer>
   </main>
 </body>

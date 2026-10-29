@@ -1,26 +1,18 @@
-const apiKey = window.WEATHER_API_KEY;
 const searchForm = document.getElementById("search-form");
 const cityInput = document.getElementById("city");
 const message = document.getElementById("message");
 
 function getWeather(latitude, longitude, cityName) {
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
-  }
-
   message.textContent = "Loading weather...";
 
-  const weatherUrl = "https://api.openweathermap.org/data/2.5/weather"
-    + "?lat=" + latitude
-    + "&lon=" + longitude
-    + "&units=metric"
-    + "&appid=" + apiKey;
+  const weatherUrl = "/api/weather"
+    + "?lat=" + encodeURIComponent(latitude)
+    + "&lon=" + encodeURIComponent(longitude);
 
   fetch(weatherUrl)
     .then(function (response) {
       if (!response.ok) {
-        throw new Error("Weather could not be loaded. Check your API key.");
+        throw new Error("Weather could not be loaded. Please try again.");
       }
       return response.json();
     })
@@ -64,22 +56,14 @@ searchForm.addEventListener("submit", function (event) {
     return;
   }
 
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
-  }
-
   message.textContent = "Searching...";
 
-  const searchUrl = "https://api.openweathermap.org/geo/1.0/direct"
-    + "?q=" + encodeURIComponent(cityName)
-    + "&limit=1"
-    + "&appid=" + apiKey;
+  const searchUrl = "/api/geocode?q=" + encodeURIComponent(cityName);
 
   fetch(searchUrl)
     .then(function (response) {
       if (!response.ok) {
-        throw new Error("City search failed. Check your API key.");
+        throw new Error("City search failed. Please try again.");
       }
       return response.json();
     })
@@ -98,11 +82,6 @@ searchForm.addEventListener("submit", function (event) {
 });
 
 document.getElementById("location-button").addEventListener("click", function () {
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
-  }
-
   if (!navigator.geolocation) {
     message.textContent = "Location is not available in this browser.";
     return;
@@ -114,11 +93,9 @@ document.getElementById("location-button").addEventListener("click", function ()
     function (position) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
-      const locationUrl = "https://api.openweathermap.org/geo/1.0/reverse"
+      const locationUrl = "/api/reverse"
         + "?lat=" + latitude
-        + "&lon=" + longitude
-        + "&limit=1"
-        + "&appid=" + apiKey;
+        + "&lon=" + longitude;
 
       fetch(locationUrl)
         .then(function (response) {
