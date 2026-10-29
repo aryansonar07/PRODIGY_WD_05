@@ -54,7 +54,7 @@ export default async function weather(request) {
     return jsonResponse({ message: "Valid latitude and longitude are required." }, 400);
   }
 
-  const apiKey = Netlify.env.get("WEATHER_API_KEY");
+  const apiKey = process.env.WEATHER_API_KEY;
   if (!apiKey) {
     return jsonResponse({
       message: "Weather service is not configured. Set WEATHER_API_KEY in Netlify."
@@ -77,7 +77,12 @@ export default async function weather(request) {
     return jsonResponse({ message: "Could not connect to the weather service." }, 502);
   }
 
-  const body = await upstream.json();
+  let body;
+  try {
+    body = await upstream.json();
+  } catch {
+    return jsonResponse({ message: "The weather service returned an invalid response." }, 502);
+  }
   if (!upstream.ok) {
     const message = upstream.status === 401
       ? "The weather service rejected its API key. Check your Netlify WEATHER_API_KEY."

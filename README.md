@@ -8,7 +8,8 @@ exposed in browser code.
 
 1. In the Netlify site dashboard, open **Site configuration → Environment
    variables**.
-2. Add `WEATHER_API_KEY` with an active API key from OpenWeatherMap.
+2. Add `WEATHER_API_KEY` with an active API key from OpenWeatherMap and make
+   sure its scope includes **Functions**.
 3. Trigger a new deploy so the function receives the environment variable.
 
 The site must be deployed on Netlify for `/api/weather` to work. For local
