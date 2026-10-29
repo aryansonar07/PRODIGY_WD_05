@@ -3,27 +3,41 @@ const searchForm = document.getElementById("search-form");
 const cityInput = document.getElementById("city");
 const message = document.getElementById("message");
 
-function getWeather(latitude, longitude, cityName) {
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
+function requestWeather(action, parameters) {
+  const query = new URLSearchParams(parameters);
+  let url;
+
+  if (apiKey) {
+    const endpoints = {
+      search: "https://api.openweathermap.org/geo/1.0/direct",
+      reverse: "https://api.openweathermap.org/geo/1.0/reverse",
+      weather: "https://api.openweathermap.org/data/2.5/weather"
+    };
+    query.set("appid", apiKey);
+    url = endpoints[action] + "?" + query.toString();
+  } else {
+    query.set("action", action);
+    url = "/api/weather?" + query.toString();
   }
 
+  return fetch(url).then(function (response) {
+    return response.json().then(function (data) {
+      if (!response.ok) {
+        throw new Error(data.message || "Weather request failed.");
+      }
+      return data;
+    });
+  });
+}
+
+function getWeather(latitude, longitude, cityName) {
   message.textContent = "Loading weather...";
 
-  const weatherUrl = "https://api.openweathermap.org/data/2.5/weather"
-    + "?lat=" + latitude
-    + "&lon=" + longitude
-    + "&units=metric"
-    + "&appid=" + apiKey;
-
-  fetch(weatherUrl)
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error("Weather could not be loaded. Check your API key.");
-      }
-      return response.json();
-    })
+  requestWeather("weather", {
+    lat: latitude,
+    lon: longitude,
+    units: "metric"
+  })
     .then(function (data) {
       document.getElementById("place").textContent = cityName;
       document.getElementById("date").textContent = new Date().toDateString();
@@ -64,25 +78,9 @@ searchForm.addEventListener("submit", function (event) {
     return;
   }
 
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
-  }
-
   message.textContent = "Searching...";
 
-  const searchUrl = "https://api.openweathermap.org/geo/1.0/direct"
-    + "?q=" + encodeURIComponent(cityName)
-    + "&limit=1"
-    + "&appid=" + apiKey;
-
-  fetch(searchUrl)
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error("City search failed. Check your API key.");
-      }
-      return response.json();
-    })
+  requestWeather("search", { q: cityName, limit: "1" })
     .then(function (places) {
       if (places.length === 0) {
         message.textContent = "City not found. Try another name.";
@@ -98,11 +96,6 @@ searchForm.addEventListener("submit", function (event) {
 });
 
 document.getElementById("location-button").addEventListener("click", function () {
-  if (!apiKey) {
-    message.textContent = "Add your API key to config.js.";
-    return;
-  }
-
   if (!navigator.geolocation) {
     message.textContent = "Location is not available in this browser.";
     return;
@@ -114,19 +107,12 @@ document.getElementById("location-button").addEventListener("click", function ()
     function (position) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
-      const locationUrl = "https://api.openweathermap.org/geo/1.0/reverse"
-        + "?lat=" + latitude
-        + "&lon=" + longitude
-        + "&limit=1"
-        + "&appid=" + apiKey;
 
-      fetch(locationUrl)
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error("Could not find your location name.");
-          }
-          return response.json();
-        })
+      requestWeather("reverse", {
+        lat: latitude,
+        lon: longitude,
+        limit: "1"
+      })
         .then(function (places) {
           if (places.length === 0) {
             throw new Error("Could not find your location name.");
